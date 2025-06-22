@@ -37,12 +37,23 @@ def datas_indisponiveis():
             response.raise_for_status()
             cal = Calendar.from_ical(response.text)
 
+
             for component in cal.walk():
                 if component.name == "VEVENT":
                     start = component.get("dtstart").dt
                     end = component.get("dtend").dt
-                    if isinstance(start, datetime) and isinstance(end, datetime):
-                        dates = get_dates_between(start.date(), (end - timedelta(days=1)).date())
+                    
+                    # Aceitar tanto datetime quanto date
+                    if start and end:
+                        # Converter para date se for datetime
+                        start_date = start.date() if isinstance(start, datetime) else start
+                        end_date = end.date() if isinstance(end, datetime) else end
+                        
+                        # Para eventos de múltiplos dias, não incluir o último dia
+                        if end_date > start_date:
+                            end_date = end_date - timedelta(days=1)
+                        
+                        dates = get_dates_between(start_date, end_date)
                         all_dates.update(dates)
         except Exception as e:
             print(f"Erro ao processar {plataforma}: {e}")
