@@ -7,7 +7,7 @@ async def root():
     return {"greeting": "Hello, World!", "message": "Welcome to FastAPI!"}
 
 @app.get("/datas-indisponiveis")
-async def datas_indisponiveis():
+def datas_indisponiveis():
     calendars = {
         "booking": "https://ical.booking.com/v1/export?t=e78ce65d-b3fe-4fd0-b601-c0d3f0c93b65",
         "vrbo": "http://www.vrbo.com/icalendar/72fd59aae4dc47e882434de6743ffe3c.ics?nonTentative",
